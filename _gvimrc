@@ -1,0 +1,91 @@
+" vim:set ts=8 sts=2 sw=2 tw=0: (この行に関しては:help modelineを参照)
+
+"---------------------------------------------------------------------------
+" 設定:
+"
+"検索結果文字列のハイライトを有効にしない
+set nohlsearch
+" 折りたたみ表示
+set foldmethod=marker
+
+"---------------------------------------------------------------------------
+" ウインドウに関する設定:
+"
+" ウインドウの幅
+set columns=200
+" ウインドウの高さ
+set lines=100
+" コマンドラインの高さ(GUI使用時)
+set cmdheight=2
+" 画面の背景色
+colorscheme ron " (GUI使用時)
+"ビープ音も、画面をフラッシュさせるのも嫌な場合
+set vb t_vb=
+
+"---------------------------------------------------------------------------
+" フォント設定:
+"
+if has('win32')
+  " Windows用
+  set guifont=MS_Gothic:h9:cSHIFTJIS
+  " 行間隔の設定
+  set linespace=1
+  " 一部のUCS文字の幅を自動計測して決める
+  if has('kaoriya')
+    set ambiwidth=auto
+  endif
+elseif has('mac')
+  set guifont=Osaka－等幅:h14
+elseif has('xfontset')
+  " UNIX用 (xfontsetを使用)
+  set guifontset=a14,r14,k14
+endif
+
+"---------------------------------------------------------------------------
+" PHP用
+"
+" 拡張子の割り振り(smartyとhtmlの割り振りはとりあえず、setfiletypeで処理する)
+augroup filetypedetect
+au! BufRead,BufNewFile *.lib setfiletype php
+" au! BufRead,BufNewFile *.tpl setfiletype html
+augroup END
+
+" 折りたたみ(markerを使いたい時はファイルに指定する)
+let php_folding=1
+au Syntax php set fdm=syntax
+" SQLのシンタックス
+let php_sql_query=1
+" HTMLのシンタックス
+let php_htmlInStrings=1
+
+" タグ自動補完
+"inoremap { {}<LEFT>
+"inoremap [ []<LEFT>
+"inoremap ( ()<LEFT>
+"inoremap " ""<LEFT>
+"inoremap ' ''<LEFT>
+"vnoremap { "zdi{<C-R>z}<ESC>
+"vnoremap [ "zdi[<C-R>z]<ESC>
+"vnoremap ( "zdi(<C-R>z)<ESC>
+"vnoremap " "zdi"<C-R>z"<ESC>
+"vnoremap ' "zdi'<C-R>z'<ESC>
+
+" 言語辞書
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType c set omnifunc=ccomplete#Complete
+
+" 文法チェック
+au Syntax php set makeprg=php\ -l\ %
+au Syntax php set errorformat=%m\ in\ %f\ on\ line\ %l
+
+" 保存時に構文チェックを実行する
+" phpプログラムの文法チェック
+" augroup phpsyntaxcheck
+"   autocmd!
+"   autocmd BufWrite *.php w !php -l
+" augroup END
