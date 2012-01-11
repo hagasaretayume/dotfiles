@@ -1,4 +1,8 @@
 " vim:set ts=8 sts=2 sw=2 tw=0: (この行に関しては:help modelineを参照)
+"
+" ~/dotfiles/_gvimrc
+" シンボリックリンクをはる
+" ln -s C:\Users\xxxxx\_gvimrc C:\Users\xxxxx\dotfiles\_gvimrc
 
 "---------------------------------------------------------------------------
 " 設定:
