@@ -1,8 +1,8 @@
 " vim:set ts=8 sts=2 sw=2 tw=0: (この行に関しては:help modelineを参照)
 "
 " ~/dotfiles/_gvimrc
-" シンボリックリンクをはる
-" ln -s C:\Users\xxxxx\_gvimrc C:\Users\xxxxx\dotfiles\_gvimrc
+" ハードリンクをはる
+" mklink C:\Users\xxxxx\_gvimrc C:\Users\xxxxx\dotfiles\_gvimrc
 
 "---------------------------------------------------------------------------
 " 設定:
@@ -11,6 +11,11 @@
 set nohlsearch
 " 折りたたみ表示
 set foldmethod=marker
+" タブの作成を楽にする
+nnoremap ,t :tabnew<Space>
+
+"短形ビジュアルモード設定(文字がない所も)
+set virtualedit=block
 
 "---------------------------------------------------------------------------
 " ウインドウに関する設定:
@@ -55,8 +60,8 @@ au! BufRead,BufNewFile *.lib setfiletype php
 augroup END
 
 " 折りたたみ(markerを使いたい時はファイルに指定する)
-let php_folding=1
-au Syntax php set fdm=syntax
+" let php_folding=1
+" au Syntax php set fdm=syntax
 " SQLのシンタックス
 let php_sql_query=1
 " HTMLのシンタックス
@@ -93,3 +98,11 @@ au Syntax php set errorformat=%m\ in\ %f\ on\ line\ %l
 "   autocmd!
 "   autocmd BufWrite *.php w !php -l
 " augroup END
+
+"vimdgrepコマンドで検索したら、検索結果の一覧を自動で開く
+augroup grepopen
+  autocmd!
+  autocmd QuickfixCmdPost vimgrep cw
+augroup END
+
+set showtabline=2

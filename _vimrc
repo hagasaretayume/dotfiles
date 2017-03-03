@@ -5,22 +5,27 @@
 " mklink C:\Users\xxxxx\_vimrc C:\Users\xxxxx\dotfiles\_vimrc
 
 "---------------------------------------------------------------------------
+" vimエディタのdiff機能は「diff」コマンドが実行できる状態でないと使用できません。 
+" 取得：
+" 「DiffUtils for Windows」
+" http://gnuwin32.sourceforge.net/packages/diffutils.htm
+
+"---------------------------------------------------------------------------
 " 設定
 "
-" 検索時大文字と小文字を区別する
-set noignorecase
+set noignorecase "検索文字列が小文字の場合は大文字小文字を区別する
+set smartcase    "検索文字列に大文字が含まれている場合は区別する
+set wrapscan     "検索時に最後まで行ったら最初に戻る
 " BOMを表示しない
 set nobomb
 
 "---------------------------------------------------------------------------
 " ファイルに関する設定
 "
-" スワップファイルを作成しない
-:set noswapfile
-" バックアップファイルを作成しない
-:set nobackup
-" viminfoファイルを作成しない
-":set viminfo=
+:set noswapfile " スワップファイルを作成しない
+:set nobackup   " バックアップファイルを作成しない
+:set noundofile " undofileを作成しない
+":set viminfo=  " viminfoファイルを作成しない
 
 "---------------------------------------------------------------------------
 " 画面設定
@@ -45,7 +50,7 @@ set expandtab
 " 画面設定(ツールバー)
 "
 " ツールバーを消したい場合
-set guioptions-=T
+" set guioptions-=T
 " メニューバーが消えます 
 set guioptions-=m
 
@@ -158,61 +163,54 @@ endif
 
 "---------------------------------------------------------------------------
 " プラグイン管理
+" 
+" 事前作業：
+"   gitBash等を入れてneobudle.vimを配置しておく。
+"   mkdir -p bundle
+"   $ git clone https://github.com/Shougo/neobundle.vim bundle/neobundle.vim
 "
-" Bundleを使うのにはgitとcurlが必要になる。
-" Windowsではmsysgitをインストールし、curl.cmdを作成する。
-" http://code.google.com/p/msysgit/downloads/list
-" 実行後、C:\Program Files\Git\cmd\curl.cmdを作成。(内容は別途)
-" 環境変数PATHを「C:\Program Files\Git\cmd」に通す
+" NeoBundleの設定：
+"   https://github.com/Shougo/neobundle.vim/blob/master/README.md
 "
-"---------------------------------------------------------------------------
-" Bundleの設定
-"
-" #Bundle...は使用するプラグインを書く。詳細はguthubのREADMEが詳しい。
-" :BundleInstall  # インストール時
-" :BundleInstall! # 更新時
-set nocompatible
-filetype off
+" NeoBundle実行方法：
+"   :NeoBundleInstall
 
-"このif文が必要。
-if has("win32") || has("win64")
-  set rtp+=~/vimfiles/vundle.git/ 
-  call vundle#rc('~/vimfiles/bundle/')
-else
-  set rtp+=~/.vim/vundle.git/ 
-  call vundle#rc()
+" Note: Skip initialization for vim-tiny or vim-small.
+if 0 | endif
+
+if &compatible
+  set nocompatible               " Be iMproved
 endif
 
-Bundle 'Shougo/neocomplcache'
-Bundle 'Shougo/unite.vim'
-Bundle 'thinca/vim-ref'
-Bundle 'thinca/vim-quickrun'
+" Required:
+" set runtimepath+=~/.vim/bundle/neobundle.vim/
+set runtimepath+=~/Documents/workTool/vim/dotfiles/bundle/neobundle.vim/
+
+" Required:
+" call neobundle#begin(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/Documents/workTool/vim/dotfiles/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+"---------------------------------------------------------------------------
+" 個別でいれたプラグインの管理
+source ~/Documents/workTool/vim/dotfiles/bundle.vim
+"---------------------------------------------------------------------------
+
+" My Bundles here:
+" Refer to |:NeoBundle-examples|.
+" Note: You don't set neobundle setting in .gvimrc!
+
+call neobundle#end()
+
+" Required:
 filetype plugin indent on
 
-" 上記Pluginはgithubで管理しないため.gitignoreを作成。
-" ~/dotfiles/.gitignore
-" ファイルには1行だけ記載
-" /vimfiles/bundle/
-
-" vimエディタのdiff機能は「diff」コマンドが実行できる状態でないと使用できません。 
-
-" MRU(ファイル履歴)
-" 履歴保存数
-":let MRU_Max_Entries=30
-" ウィンドウの閉じる設定
-":let MRU_Auto_Close=0
-
-" Ctag(タグ作成)
-" http://nanasi.jp/articles/others/ctags.html
-"nmap <silent> <F4>
-"    \ :!ctags-ex -f %:p:h/tags
-"    \ --langmap="php:+.inc"
-"    \ -h ".php.inc" -R --totals=yes
-"    \ --tag-relative=yes --PHP-kinds=+cf-v %:p:h<CR>
-"set tags=./tags,tags
-" タグファイル作成[!ctags -R]
-" ctags -R --langmap=PHP:.php.inc --php-types=c+f+d+v+i
-
-" プラグイン
-" YankRing.vim(プラグインをインストールしておくこと)割り当て
-" nmap ,y :YRShow<CR>
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+"---------------------------------------------------------------------------
+" ロードされたプラグインを表示する
+" :scriptnames
